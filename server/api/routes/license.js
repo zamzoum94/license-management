@@ -1,6 +1,10 @@
 const express = require('express');
-
 const router = express.Router();
+const chalk = require('chalk');
+
+const fs = require('fs');
+const PATH = 'http://localhost:3000/afnor';
+const path = require('path');
 
 const db = require('../../db/index');
 const mongoose = require('mongoose');
@@ -23,7 +27,7 @@ router.get('/', (req, res)=>{
 
 router.get('/:id', (req, res)=>{
     const { id } = req.params;
-    db.License.find({_id : id})
+    db.License.findById(id)
     .exec()
     .then(doc => {
         res.status(200).json({
@@ -40,18 +44,20 @@ router.get('/:id', (req, res)=>{
 });
 
 router.post('/', (req, res)=>{
-    const { name, price } = req.body;
     const user = new db.License({
         _id : new mongoose.Types.ObjectId(),
-        name,
-        price
+        ...req.body
     });
+
     user.save()
     .then(doc => {
-        res.status(201).json({
-            message : 'post works',
-            body : doc
-        });
+            fs.writeFile(`afnor/${doc._id}.txt`, JSON.stringify(doc), 'utf8', (err) =>{
+                if(err) throw err
+                res.status(201).json({
+                    message : 'post works',
+                    body : doc
+                });
+            })
     })
     .catch(err => {
         res.status(500).json({
@@ -62,11 +68,13 @@ router.post('/', (req, res)=>{
 });
 
 router.patch('/:id', (req, res)=>{
-    const { name, price } = req.body;
+    console.log(req.body)
+    console.log(chalk.blue('Hi'))
     const { id } = req.params;
-    db.License.updateOne({_id : id}, {$set : {name : name, price : price}})
+    db.License.updateOne({_id : id}, {$set : { ...req.body}})
     .exec()
     .then(doc =>{
+        console.log('done')
         res.status(200).json({
             message : 'Update works',
             body : doc
@@ -82,7 +90,7 @@ router.patch('/:id', (req, res)=>{
 
 router.delete('/:id', (req, res)=>{
     const { id } = req.params;
-    db.License.deleteOne({_id : id})
+    db.License.deleteOne({ _id : id})
     .exec()
     .then(doc =>{
         res.status(200).json({
@@ -97,5 +105,6 @@ router.delete('/:id', (req, res)=>{
         });
     })
 });
+
 
 module.exports = router;

@@ -2,8 +2,16 @@
 module.exports = function(mongoose){
     const licenseSchema = new mongoose.Schema({
         _id : mongoose.Schema.Types.ObjectId,
-        name : String,
-        price : Number
+        enseigne : String,
+        siret : String,
+        paye : String,
+        ville : String,
+        adresse : String,
+        code_postal : String,
+        telephone : String, 
+        license : String,
+        etat : String,
+        site : String
     });
 
     return mongoose.model('License', licenseSchema);

@@ -1,41 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default class Home extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            data : []
-        };
-    }
+import Sidebar from './sidebar';
+import Dashboard from './dashboard';
+import NewLicence from './newlicense';
+import Licence from './license';
+import {BrowserRouter as Router, Route, Switch, useRouteMatch } from 'react-router-dom';
+import License from './license';
 
-    componentDidMount(){
-        fetch('http://localhost:3000')
-        .then(res =>{
-            return res.json()
-        })
-        .then(docs =>{
-            this.setState({
-                data : docs.body
-            })
-            console.log('State: ',this.state)
-        })
-        .catch(err =>{
-            console.log(err)
-        })
-    }
-
-    render(){
-        return(
-            <div className='container'>
-                <div className='row'>
-                    {this.state.data.map((element, key) =>{
-                        return(
-                        <div className='col-md-4' key={key}>
-                            {element.name}
-                        </div>)
-                    })}
-                </div>  
+const Home = function() {
+    let match = useRouteMatch();
+    return(
+        <div className='row'>
+            <div className='col-md-2'>
+                <Sidebar/>
             </div>
-        )
-    }
+            <div className='col-md'>
+                <Switch>
+                    <Route path={"/"} exact> 
+                        <Dashboard/>
+                    </Route>
+                    <Route path={`/add`} exact> 
+                        <NewLicence/>
+                    </Route>
+                    <Route path={"/licence/:id"} component={License}/>
+                </Switch>
+            </div>
+        </div>
+    )
 }
+
+export default Home;

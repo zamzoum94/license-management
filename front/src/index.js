@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Home from './components/home'
+import App from './app';
+
 import * as serviceWorker from './serviceWorker';
 
 
 // hello
 ReactDOM.render(
-  <React.StrictMode>
-    <Home />
-  </React.StrictMode>,
+  <App/>,
   document.getElementById('root')
 );
 
