@@ -19,7 +19,7 @@ const Sidebar = function()  {
                     <FontAwesomeIcon icon={faChartArea} style={style}></FontAwesomeIcon>
                 </li>
             </Link>
-            <Link to={'add'}>
+            <Link to={'/add'}>
                 <li>
                     Add new Licence
                     <FontAwesomeIcon icon={faPlus} style={style} ></FontAwesomeIcon>

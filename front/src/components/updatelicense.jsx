@@ -16,11 +16,11 @@ class UpdateLicense extends React.Component{
     handleUpdate(event){
         event.preventDefault();
         fetch(`http://localhost:3000/${this.state.data._id}`, {
-            method : "PATCH",
+            method : 'PATCH',
             headers : {
                 'Content-Type' : 'application/json'
             },
-            body : this.state.data
+            body : JSON.stringify(this.state.data)
         })
         this.props.switchUpdate();
     }

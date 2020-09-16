@@ -3,11 +3,22 @@ const router = express.Router();
 const chalk = require('chalk');
 
 const fs = require('fs');
-const PATH = 'http://localhost:3000/afnor';
 const path = require('path');
+let db = require('../../db/index');
 
-const db = require('../../db/index');
+console.log(chalk.green(db))
+
 const mongoose = require('mongoose');
+
+
+let generateString = function(){
+    let str = "";  
+    for(let i = 0; i < 8; ++i){
+        let code = Math.floor(Math.random() * 126);
+        str = str + String.fromCharCode(code);
+    }
+    return str;
+}
 
 router.get('/', (req, res)=>{
     db.License.find().exec()
@@ -44,8 +55,13 @@ router.get('/:id', (req, res)=>{
 });
 
 router.post('/', (req, res)=>{
+    const id = new mongoose.Types.ObjectId();
+    db = require('../../db/index')(id);
+    
     const user = new db.License({
-        _id : new mongoose.Types.ObjectId(),
+        _id : id,
+        licence : generateString(),
+        code_licence : generateString(),
         ...req.body
     });
 
@@ -68,8 +84,6 @@ router.post('/', (req, res)=>{
 });
 
 router.patch('/:id', (req, res)=>{
-    console.log(req.body)
-    console.log(chalk.blue('Hi'))
     const { id } = req.params;
     db.License.updateOne({_id : id}, {$set : { ...req.body}})
     .exec()

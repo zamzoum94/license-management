@@ -133,22 +133,6 @@ class NewLicence extends React.Component{
                         </div>
                         <div className="form-group row">
                             <div className='col-md-3'>
-                                <label htmlFor="licence">Licence</label>
-                            </div>
-                            <div className='col-md'>
-                                <input className="form-control" name="licence" onChange={this.handleInput.bind(this)}></input>
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <div className='col-md-3'>
-                                <label htmlFor="code_licence">Code licence</label>
-                            </div>
-                            <div className='col-md'>
-                                <input className="form-control" name="code_licence" onChange={this.handleInput.bind(this)}></input>
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <div className='col-md-3'>
                                 <label htmlFor="etat">Etat</label>
                             </div>
                             <div className='col-md'>

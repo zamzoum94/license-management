@@ -1,4 +1,5 @@
 
+
 module.exports = function(mongoose){
     const licenseSchema = new mongoose.Schema({
         _id : mongoose.Schema.Types.ObjectId,
