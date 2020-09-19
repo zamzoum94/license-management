@@ -5,16 +5,25 @@ const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 let db = require('../../db/index');
-
-console.log(chalk.green(db))
-
 const mongoose = require('mongoose');
 
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
 let generateString = function(){
     let str = "";  
-    for(let i = 0; i < 8; ++i){
-        let code = Math.floor(Math.random() * 126);
+    for(let i = 0; i < 12; ++i){
+        let code = getRandomArbitrary(65, 90);
+        str = str + String.fromCharCode(code);
+    }
+    return str;
+}
+
+let generateNumber = function(){
+    let str = "";  
+    for(let i = 0; i < 12; ++i){
+        let code = getRandomArbitrary(48, 57);
         str = str + String.fromCharCode(code);
     }
     return str;
@@ -24,8 +33,7 @@ router.get('/', (req, res)=>{
     db.License.find().exec()
     .then(doc => {
         res.status(200).json({
-            message : doc.length > 0 ? 'get works' : 'not found',
-            body : doc
+            doc
         });
     })
     .catch(err => {
@@ -42,8 +50,7 @@ router.get('/:id', (req, res)=>{
     .exec()
     .then(doc => {
         res.status(200).json({
-            message :  doc.length > 0 ? 'get works' : 'not found',
-            body : doc
+            doc
         });
     })
     .catch(err => {
@@ -55,25 +62,22 @@ router.get('/:id', (req, res)=>{
 });
 
 router.post('/', (req, res)=>{
-    const id = new mongoose.Types.ObjectId();
-    db = require('../../db/index')(id);
-    
+    const _id = new mongoose.Types.ObjectId();
+    const licence = generateString();
+    const code_licence = generateNumber();
     const user = new db.License({
-        _id : id,
-        licence : generateString(),
-        code_licence : generateString(),
+        _id,
+        licence,
+        code_licence,
         ...req.body
     });
-
     user.save()
     .then(doc => {
-            fs.writeFile(`afnor/${doc._id}.txt`, JSON.stringify(doc), 'utf8', (err) =>{
-                if(err) throw err
-                res.status(201).json({
-                    message : 'post works',
-                    body : doc
-                });
-            })
+        console.log(chalk.greenBright('success'))
+        db.Connection.createDataBase(doc)
+        res.status(201).json({
+            doc
+        });
     })
     .catch(err => {
         res.status(500).json({
@@ -88,10 +92,8 @@ router.patch('/:id', (req, res)=>{
     db.License.updateOne({_id : id}, {$set : { ...req.body}})
     .exec()
     .then(doc =>{
-        console.log('done')
         res.status(200).json({
-            message : 'Update works',
-            body : doc
+            doc
         });
     })
     .catch(err => {
@@ -107,9 +109,8 @@ router.delete('/:id', (req, res)=>{
     db.License.deleteOne({ _id : id})
     .exec()
     .then(doc =>{
-        res.status(200).json({
-            message : 'delete done',
-            body : doc
+        res.status(200).json({ 
+            doc
         })
     })
     .catch(err => {

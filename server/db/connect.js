@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const chalk = require('chalk');
 
-module.exports = function(id){
-        console.log(chalk.blue(id));
-        const db = mongoose.connect(`mongodb://localhost:27017/licencemanagement${id}`, {
-        useNewUrlParser: true, 
-        useUnifiedTopology: true
+module.exports.createDataBase = function(id){
+    mongoose.connection.close(() => {
+        mongoose.connect(`mongodb://localhost:27017/licence${id.licence}`, {
+            useNewUrlParser: true, 
+            useUnifiedTopology: true
+        });
     });
 }

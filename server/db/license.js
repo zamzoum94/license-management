@@ -1,4 +1,4 @@
-
+const chalk = require("chalk");
 
 module.exports = function(mongoose){
     const licenseSchema = new mongoose.Schema({
@@ -10,7 +10,8 @@ module.exports = function(mongoose){
         adresse : String,
         code_postal : String,
         telephone : String, 
-        license : String,
+        licence : String,
+        code_licence : String,
         etat : String,
         site : String
     });
