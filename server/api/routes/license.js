@@ -5,6 +5,9 @@ const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 let db = require('../../db/index');
+const { License } = require('../../db/index');
+const { MongoClient } = require('mongodb'); 
+
 const mongoose = require('mongoose');
 
 function getRandomArbitrary(min, max) {
@@ -30,7 +33,7 @@ let generateNumber = function(){
 }
 
 router.get('/', (req, res)=>{
-    db.License.find().exec()
+    License.find().exec()
     .then(doc => {
         res.status(200).json({
             doc
@@ -46,7 +49,7 @@ router.get('/', (req, res)=>{
 
 router.get('/:id', (req, res)=>{
     const { id } = req.params;
-    db.License.findById(id)
+    License.findById(id)
     .exec()
     .then(doc => {
         res.status(200).json({
@@ -65,18 +68,24 @@ router.post('/', (req, res)=>{
     const _id = new mongoose.Types.ObjectId();
     const licence = generateString();
     const code_licence = generateNumber();
-    const user = new db.License({
+    const user = new License({
         _id,
         licence,
         code_licence,
         ...req.body
     });
+
     user.save()
     .then(doc => {
-        console.log(chalk.greenBright('success'))
-        db.Connection.createDataBase(doc)
-        res.status(201).json({
-            doc
+        console.log(chalk.green('success'))
+        MongoClient.connect(`mongodb://localhost:27017/${doc.licence}`, {
+            useUnifiedTopology: true
+        }, (err, dbr) =>{
+            const dbc = dbr.db(doc.licence);
+            dbc.createCollection('newCollection');
+            res.status(201).json({
+                doc
+            });
         });
     })
     .catch(err => {
@@ -89,7 +98,7 @@ router.post('/', (req, res)=>{
 
 router.patch('/:id', (req, res)=>{
     const { id } = req.params;
-    db.License.updateOne({_id : id}, {$set : { ...req.body}})
+    License.updateOne({_id : id}, {$set : { ...req.body}})
     .exec()
     .then(doc =>{
         res.status(200).json({
@@ -106,7 +115,7 @@ router.patch('/:id', (req, res)=>{
 
 router.delete('/:id', (req, res)=>{
     const { id } = req.params;
-    db.License.deleteOne({ _id : id})
+    License.deleteOne({ _id : id})
     .exec()
     .then(doc =>{
         res.status(200).json({ 
