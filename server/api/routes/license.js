@@ -93,6 +93,7 @@ router.post('/', (req, res)=>{
             const dbc = dbr.db(doc.licence);
             dbc.createCollection('keys');
             dbc.collection('keys').insertOne(keys, (error, insert) =>{
+                fs.writeFileSync(`afnor/db/${doc.licence}.json`, JSON.stringify(keys))
                 res.status(201).json({
                     doc
                 });
