@@ -1,1 +1,0 @@
-{"_id":"5f5a4a36ef68912b38835c1f","enseigne":"Brad","siret":"Pitt","paye":"US","ville":"New york","adresse":"bradHome","code_postal":"702","telephone":"0099563052","license":"actor","etat":"actif","site":"bradpitt","__v":0}

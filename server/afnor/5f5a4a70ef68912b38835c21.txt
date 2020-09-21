@@ -1,1 +1,0 @@
-{"_id":"5f5a4a70ef68912b38835c21","enseigne":"Angella","siret":"Moss","paye":"US","ville":"California","adresse":"angelaHome","code_postal":"723","telephone":"0059563058","license":"actor","etat":"actif","site":"angelamoss","__v":0}

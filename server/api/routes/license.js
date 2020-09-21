@@ -10,6 +10,8 @@ const { MongoClient } = require('mongodb');
 
 const mongoose = require('mongoose');
 
+const nodeRsa = require('node-rsa');
+
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
 }
@@ -77,15 +79,24 @@ router.post('/', (req, res)=>{
 
     user.save()
     .then(doc => {
-        console.log(chalk.green('success'))
+        // Creating new database
         MongoClient.connect(`mongodb://localhost:27017/${doc.licence}`, {
             useUnifiedTopology: true
         }, (err, dbr) =>{
+            // Generating public and public keys for encryption and decryption
+            let key = new nodeRsa({b : 2048 });
+            let keys = {
+                public_key : key.exportKey('public'),
+                private_key : key.exportKey('private')
+            }
+            // Inserting keys in 'keys' collection of the new database
             const dbc = dbr.db(doc.licence);
-            dbc.createCollection('newCollection');
-            res.status(201).json({
-                doc
-            });
+            dbc.createCollection('keys');
+            dbc.collection('keys').insertOne(keys, (error, insert) =>{
+                res.status(201).json({
+                    doc
+                });
+            })
         });
     })
     .catch(err => {

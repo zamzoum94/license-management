@@ -1,1 +1,0 @@
-{"_id":"5f5a34e754c608105cfb3038","enseigne":"Angelina","siret":"Jolie","paye":"US","ville":"New york","adresse":"angelinaHome","code_postal":"702","telephone":"0009563759","license":"actor","etat":"inactif","site":"angelinajolie","__v":0}
